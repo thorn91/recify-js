@@ -13,13 +13,22 @@ datasource db {
     referentialIntegrity = "prisma"
 }
 
-model recipe {
+model Recipe {
+    id          Int          @id @default(autoincrement())
+    name        String       @db.Text
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    author      User         @relation(fields: [authorId], references: [id])
+    authorId    String
+    ingredients Ingredient[]
+}
+
+model Ingredient {
     id        Int      @id @default(autoincrement())
     name      String   @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    author    User     @relation(fields: [authorId], references: [id])
-    authorId  String
+    recipes   Recipe[]
 }
 
 model Example {
@@ -61,7 +70,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    recipe        recipe[]
+    recipe        Recipe[]
 }
 
 model VerificationToken {
